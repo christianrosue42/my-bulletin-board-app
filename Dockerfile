@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Install the app's dependencies inside the Docker container
 RUN npm install
+RUN npm install selenium-webdriver chromedriver mocha chai react-draggable randomcolor
 
 # Copy the rest of the app's source code into the Docker container
 COPY . .
