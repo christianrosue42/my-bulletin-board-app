@@ -16,19 +16,19 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Dependencies
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          load: true
+          tags: user/app:latest
+
+      - name: Run Docker Container
         run: |
-          npm install
-          npm install selenium-webdriver chromedriver mocha chai react-draggable randomcolor
-
-      - name: Build React App
-        run: npm run build
-
-      - name: Start Node.js Server
-        run: npm start &
-
-      - name: Wait for Server to Start
-        run: sleep 10
+          docker run -d -p 3000:3000 --name my-bulletin-board-app user/app:latest
+          sleep 10
 
       - name: Run Selenium Tests
-        run: npm test
+        run: |
+          docker exec my-bulletin-board-app npm test
